@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.core import serializers
 from pymongo import MongoClient
 from pymongo.cursor import CursorType
 
@@ -9,8 +10,6 @@ def index(request):
     db = client['baedalgeek_test']
     col = db['Users']
 
-    data = col.find().sort({"idate":-1}).limit(1).toString()
-    return HttpResponse(data, content_type="text/plain")
-    
-
-#     output = "{\n" + "\t\"name\": \"" + name + "\",\n\t\"age\": " + age + ",\n\t\"message\": " + message + "\n}"
+    data = col.find().sort({"idate":-1})
+    jsonData = serializers.serialize('json',data)
+    return HttpResponse(jsonData, content_type="text/json-comment-filtered")
